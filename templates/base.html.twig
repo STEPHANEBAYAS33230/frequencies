@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}Fréquencies{% endblock %}</title>
+    <script src="https://kit.fontawesome.com/aa652281aa.js" crossorigin="anonymous"></script>
+    <!-- ^^fontansome -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('assets/css/base.html.css') }}">
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+<header>
+    {% block header %}{% endblock %}
+
+</header>
+<main>
+    {% block main %}{% endblock %}
+
+
+</main>
+
+{% block scriptjs %}{% endblock %}
+</body>
+</html>

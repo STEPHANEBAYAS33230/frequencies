@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} | Accueil{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+{% endblock %}
+
+{% block scriptjs %}
+    <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="row justify-content-around col-12">
+                <h1>FREQUENCIES</h1>
+                <p>
+                    <a href="#">home</a></p>
+                <p>
+                    <a href="#">about</a>
+                </p>
+                <p>
+                    <a href="#">product</a>
+                </p>
+                <p>
+                    <a href="#">contact</a>
+                </p>
+                <p>
+                    <a href="{{ path('app_loginEmail') }}">login</a>
+                </p>
+                <p>
+                    <a href="{{ path('app_register') }}">new utilisateur</a>
+                </p>
+        </div> <!-- fin row -->
+    </div>
+
+
+{% endblock %}

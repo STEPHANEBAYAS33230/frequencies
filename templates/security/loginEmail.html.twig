@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} | loginEmail{% endblock %}
+
+{% block main %}
+    <div>
+    <h1>login-mail</h1>
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="text-warning">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+    <div>
+
+    {{ form_start(registrationForm) }}
+    {{ form_row(registrationForm.email,{ label:'identifiant: '}) }}
+
+
+    <button id="buttonForm" type="submit" class="btn" >Envoyer</button>
+
+
+    {{ form_end(registrationForm) }}
+    <a class="btn btn-outline-primary" href=javascript:history.go(-1)>Retour</a>
+    </div>
+
+{% endblock %}

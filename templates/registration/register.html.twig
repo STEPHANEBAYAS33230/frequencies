@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} | Register{% endblock %}
+
+{% block main %}
+    <h1>Register</h1>
+    <p>Un mot de passe doit contenir 8 caractères minimums (max 50), une majuscule, une minuscule, un caractère spécial...</p>
+
+    {{ form_start(registrationForm) }}
+        {{ form_row(registrationForm.email,{ label:'identifiant: '}) }}
+        {{ form_row(registrationForm.plainPassword, {
+            label: 'Mot de passe: '
+        }) }}
+    <label for="confirmMdp">Confirmation Mot de passe :</label>
+    <input id="confirmMdp" name="confirmMdp" maxlength="50" type="password" oninput="visuelBouton()">
+    {{ form_row(registrationForm.nom,{ label:'nom: '}) }}
+    {{ form_row(registrationForm.prenom,{ label:'prenom: '}) }}
+    {{ form_row(registrationForm.agreeTerms) }}
+
+        <button id="buttonForm" type="submit" class="btn" style="visibility: hidden;">Register</button>
+
+    <script type="text/javascript">
+        setInterval(function(){ visuelBouton(); }, 500);
+        document.getElementById("registration_form_plainPassword").oninput="visuelBouton()";
+        function visuelBouton() {
+            mdp=document.getElementById("registration_form_plainPassword").value;
+            confirmMdp=document.getElementById("confirmMdp").value;
+            if (mdp===confirmMdp)
+                 {
+                document.getElementById("buttonForm").style="visibility: visible;";
+                }
+            if (mdp!==confirmMdp)
+                {
+                    document.getElementById("buttonForm").style="visibility: hidden;";
+
+                }
+        }
+    </script>
+    {{ form_end(registrationForm) }}
+    <a class="btn btn-outline-primary" href=javascript:history.go(-1)>Retour</a>
+{% endblock %}

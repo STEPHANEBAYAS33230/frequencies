@@ -1,0 +1,40 @@
+{% extends 'baseEmail.html.twig' %}
+
+{% block title %}MAIL CODE{% endblock %}
+
+ {% block stylesheets %}
+     <!--<link rel="stylesheet" href="{{ asset('assets/css/ajouterProduits.css') }}">-->
+ {% endblock %}
+
+{% block main %}
+
+    <div class="container marge-container">
+        <div class=row">
+            <div class="col-xl-12 justify-content-center titre">
+                <div>
+                    <p>Ne pas répondre à ce mail utiliser le lien ci-dessous.</p>
+                    <h1 style="color: red;">Fréquencies: </h1>
+                    <img  src="https://storage.benevolt.fr/ce4a23e0-3466-4ab2-afa1-d72e9542ecd7/c/facebook-avatar.jpg" alt="logo frequencies">
+                    <h2><a href="mailto: contact@frequencies.fr" id="mymail" target="_blank">Pour nous contacter cliquer ici: contact@frequencies.fr<i class="fas fa-envelope-square turn"></i></a></h2>
+                    <h2 class="mt-3 mt-6 text-danger">
+                        Frequencies produit des fictions sonores, créées et inspirées par des personnes malvoyantes à destination de tous.<br>
+                        Nous créons cette fiction avec l’objectif de faire rêver les gens en leur racontant une histoire qui leur permette de s’évader de leur quotidien.
+                    </h2>
+                    <img  src="https://storage.benevolt.fr/ce4a23e0-3466-4ab2-afa1-d72e9542ecd7/c/facebook-avatar.jpg" alt="logo frequencies">
+                    <hr>
+                    <h3 style="color: purple;">
+                        De la part de {{ from }} Fréquencies<br>
+                        AU SUJET DE : {{ subject }}<br>
+                        bonjour {{ prenom }}-{{ nom }}:<br>
+                        {{ message }}<br>
+                        {{ code }}<br>
+                        <br>bonne journée
+                        <br>Fréquencies
+                    </h3>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
