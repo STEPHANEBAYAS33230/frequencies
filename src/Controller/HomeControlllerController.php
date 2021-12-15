@@ -20,17 +20,4 @@ class HomeControlllerController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/monApplI/homehop", name="home_hop")
-     */
-    public function hop(): Response
-
-    {
-        $user=$this->getUser();
-        $role=$user->getRoles();
-        sleep(2);
-        return $this->render('security/suivant.html.twig', [ 'role'=>$role,
-        ]);
-
-    }
 }

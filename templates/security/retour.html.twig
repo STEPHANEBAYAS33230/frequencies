@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} | loginEmail{% endblock %}
+
+{% block main %}
+    <div>
+        <h1>Problème de connexion ! retour home</h1>
+        <h1>{{ message }}</h1>
+        {% if message=="Le code saisi n'est plus valable (3minutes maximum)." %}
+            <script type="text/javascript">
+                setTimeout(function(){window.location.href="{{ path('app_logout',{}) }}";},1500);
+            </script>
+        {% endif %}
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="text-warning">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+
+{% endblock %}

@@ -4,6 +4,11 @@
 
 {% block main %}
     <div>
+        <h1>{{ message }}</h1>
+        {% if message=="Le code saisi n'est plus valable (3minutes maximum)." %}<script type="text/javascript">
+            setTimeout(function(){window.location.href="{{ path('app_logout',{}) }}";},5000);
+        </script>
+        {% endif %}
     <h1>login-mail</h1>
         {% for label, messages in app.flashes %}
             {% for message in messages %}

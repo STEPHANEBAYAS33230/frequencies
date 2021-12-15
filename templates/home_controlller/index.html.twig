@@ -16,7 +16,7 @@
 {% block main %}
     <div class="container">
         <div class="row justify-content-around col-12">
-                <h1>FREQUENCIES</h1>
+                <h1>NOM DU SITE/...</h1>
                 <p>
                     <a href="#">home</a></p>
                 <p>
@@ -35,6 +35,15 @@
                     <a href="{{ path('app_register') }}">new utilisateur</a>
                 </p>
         </div> <!-- fin row -->
+    </div>
+    <div>
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="text-warning">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
     </div>
 
 

@@ -8,6 +8,7 @@ use App\Form\FiltreUtilisateursType;
 use App\Form\LoginMailType;
 use App\Security\UtilisateurAuthenticator;
 use App\Service\EnvoiDeMail;
+use App\Service\IntervalleDeDate;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,34 +26,35 @@ class SecurityController extends AbstractController
      * @Route("/login", name="app_login")
      *
      */
-    public function login(AuthenticationUtils $authenticationUtils, Request $request,EntityManagerInterface $em, UserPasswordHasherInterface $userPasswordHasher): Response
+    public function login(AuthenticationUtils $authenticationUtils, Request $request,EntityManagerInterface $em, UserPasswordHasherInterface $userPasswordHasher,  IntervalleDeDate $ecartDate): Response
     {
 
            //if ($this->getUser()) {
          // return $this->redirectToRoute('/');
          //}
-        /*foreach( $produits as $prd ) {
-            $typeProd=$request->request->get('prod'.(string)$prd->getId(),0);
-            if (is_integer($typeProd)) {
-                $prd->setQuantite($request->request->get('prod' . (string)$prd->getId(), 0));
-            }
-        }*/
+
+        $messageD="";
         $user=$this->getUser();
         if ($user==null) {
             $placeholder="code reçu/votre email";
             $codePassw="code : ";
         } elseif ($user!=null and $user->getRoles()==['ROLE_INTER']) {
+            $ecar=$ecartDate->dateDiff($user->getMoment());
+            if ($ecar>=3) {//code valable uniq 3min
+
+                $messageD="Le code saisi n'est plus valable (3minutes maximum).";
+                $this->addFlash('error', "Le code saisi n'est plus valable (3minutes maximum).");
+                return $this->render('security/retour.html.twig', ['message'=> $messageD]);
+            }
             $placeholder="password";
             $codePassw="mot de passe : ";
             $utilisateurRepo = $this->getDoctrine()->getRepository(Utilisateur::class);
             $utilisateur = $utilisateurRepo->trouverUtilisateur($user->getEmail());
-            //VERIFIER SI DATETIME 5MIN MAX APRES
             //CHANGER CODE PAR MP
             $utilisateur[0]->setPassword(
                     $user->getPassword2()
                 );
             $utilisateur[0]->setRoles($user->getRoledeux());
-            //* save
             $em->persist($utilisateur[0]);
             $em->flush();
 
@@ -62,7 +64,7 @@ class SecurityController extends AbstractController
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
        $lastUsername = $authenticationUtils->getLastUsername();
-         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error, 'placeholder'=>$placeholder,'codePassw'=>$codePassw]);
+         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error, 'placeholder'=>$placeholder,'codePassw'=>$codePassw,'message'=>$messageD]);
 
     }
 
@@ -78,8 +80,9 @@ class SecurityController extends AbstractController
      * @Route ("/login/email", name="app_loginEmail")
      *
      */
-    public function loginEmail(UtilisateurAuthenticator $authenticator,UserAuthenticatorInterface $userAuthenticator,UserPasswordHasherInterface $userPasswordHasher,Request $request,EnvoiDeMail $sender, MailerInterface $mailer, EntityManagerInterface $em, AuthenticationUtils $authenticationUtils): Response
+    public function loginEmail(UserPasswordHasherInterface $userPasswordHasher,Request $request,EnvoiDeMail $sender, MailerInterface $mailer, EntityManagerInterface $em): Response
     {
+        $messageD="";
         $user= new FiltreUtilisateurs();
         $registerForm2 = $this->createForm(FiltreUtilisateursType::class, $user);
         $registerForm2->handleRequest($request);
@@ -129,34 +132,23 @@ class SecurityController extends AbstractController
         }
 
         return $this->render('security/loginEmail.html.twig', [
-            "registrationForm"=>$registerForm2->createView(),
+            "registrationForm"=>$registerForm2->createView(), 'message'=>$messageD
         ]);
     }
     /**
      * @Route ("/monApplI/after", name="app_inter")
      *
      */
-    public function loginAfter(UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $em){
-        //$this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+    public function loginAfter(){
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $user=$this->getUser();
         if ($user->getRoles()==['ROLE_ADMIN']) {
+            return $this->redirectToRoute('app_register', []);
+        }
+        if ($user->getRoles()==['ROLE_USER']) {
             return $this->redirectToRoute('home_controller', []);
         }
-
         if ($user->getRoles()==['ROLE_INTER']) {
-            $utilisateurRepo = $this->getDoctrine()->getRepository(Utilisateur::class);
-            $utilisateur = $utilisateurRepo->trouverUtilisateur($user->getEmail());
-            //VERIFIER SI DATETIME 5MIN MAX APRES
-            //CHANGER CODE PAR MP
-            /*$utilisateur[0]->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $utilisateur[0],
-                    $user->getPassword2()
-                ));*/
-            //$utilisateur[0]->setRoles($user->getRoledeux());
-            //* save
-            //$em->persist($utilisateur[0]);
-            //$em->flush();
             return $this->redirectToRoute('app_login', []);
         }
 

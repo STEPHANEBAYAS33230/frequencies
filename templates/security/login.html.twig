@@ -3,24 +3,32 @@
 {% block title %}{{ parent() }} | Login{% endblock %}
 
 {% block main %}
-    <!--<label for="cod">code reçu:</label>
-    <input id="cod" name="cod" placeholder="code reçu par email" type="number" class="form-control" oninput="visibleBouton()">-->
+    <div>
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="text-warning">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+
 <form method="post">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
 
-    {% if app.user %}
+    {# {% if app.user %}
         <div class="mb-3">
             You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
         </div>
-    {% endif %}
+    {% endif %} #}
 
     <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
     <label for="inputEmail">Email</label>
     <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control"  autocomplete="email" required autofocus>
     <label for="inputPassword">{{ codePassw }}</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" placeholder="{{ placeholder }}" required>
+    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" placeholder="{{ placeholder }}" required><i class="far fa-eye text-primary" onmouseover="voir();" onmouseout="cache();"></i>
 
     <input type="hidden" name="_csrf_token"
            value="{{ csrf_token('authenticate') }}"
@@ -41,6 +49,13 @@
         Valider
     </button>
 </form>
-    <a class="btn btn-outline-primary" href=javascript:history.go(-1)>Retour</a>
-
+    <a class="btn btn-outline-primary" href="{{ path('home_controller') }}">Retour home</a>
+<script type="text/javascript">
+    function voir() {
+        document.getElementById("inputPassword").type="text";
+    }
+    function cache() {
+        document.getElementById("inputPassword").type="password";
+    }
+</script>
 {% endblock %}
