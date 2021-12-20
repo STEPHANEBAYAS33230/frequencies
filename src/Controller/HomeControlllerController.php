@@ -16,10 +16,9 @@ class HomeControlllerController extends AbstractController
      */
     public function index(IntervalleDeDate $ecartDate, EntityManagerInterface $em): Response
     {
-
+        // ICI ON EFFACE LES COMPTES NON VALIDEES PAR L EMAIL RECU DE L UTILISATEUR
         $utilisateurRepo = $this->getDoctrine()->getRepository(Utilisateur::class);
         $utilisateur = $utilisateurRepo->trouverDateCompteValidate();
-
         foreach ($utilisateur as $utili) {
             $ecar=$ecartDate->dateDiff($utili->getDateTimeValidcompte());
             if ($ecar>14 && ($utili->getCompteValidate())=="false") {
@@ -27,7 +26,7 @@ class HomeControlllerController extends AbstractController
                 $em->flush();
             }
 
-        }
+        }// FIN *******************************************************************
 
             return $this->redirectToRoute('home_controller1', []);
 
