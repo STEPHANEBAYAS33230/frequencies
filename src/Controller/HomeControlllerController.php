@@ -16,6 +16,10 @@ class HomeControlllerController extends AbstractController
      */
     public function index(IntervalleDeDate $ecartDate, EntityManagerInterface $em): Response
     {
+        // findOneBy utilisation
+        //  $usersRepo = $this->getDoctrine()->getRepository(Utilisateur::class);
+        // $user=$userRepo->findOneBy(['keyCode'=>$token]) keyCode est le token en bdd
+
         // ICI ON EFFACE LES COMPTES NON VALIDEES PAR L EMAIL RECU DE L UTILISATEUR
         $utilisateurRepo = $this->getDoctrine()->getRepository(Utilisateur::class);
         $utilisateur = $utilisateurRepo->trouverDateCompteValidate();
