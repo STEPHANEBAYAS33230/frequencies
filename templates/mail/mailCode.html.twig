@@ -28,6 +28,13 @@
                         bonjour {{ prenom }}-{{ nom }}:<br>
                         {{ message }}<br>
                         {{ code }}<br>
+                        {% if bouton=="true" %}
+                            <div class="text-center">
+                            {# padding: 15px; background-color: #1d2124; color: #9fcdff; margin: 15px; text-align: center; #}
+                            <a href="{{ hrefBouton }}" class="btn-primary btn" style="">{{ textBouton }}</a>
+                            </div>
+                        {% endif %}
+                        <br>
                         <br>bonne journée
                         <br>Fréquencies
                     </h3>

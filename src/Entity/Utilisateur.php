@@ -75,6 +75,21 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $roledeux = [];
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $keyCode;
+
+    /**
+     * @ORM\Column(type="string", length=15)
+     */
+    private $compte_validate;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $dateTime_validcompte;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -232,6 +247,42 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRoledeux(array $roledeux): self
     {
         $this->roledeux = $roledeux;
+
+        return $this;
+    }
+
+    public function getKeyCode(): ?string
+    {
+        return $this->keyCode;
+    }
+
+    public function setKeyCode(?string $keyCode): self
+    {
+        $this->keyCode = $keyCode;
+
+        return $this;
+    }
+
+    public function getCompteValidate(): ?string
+    {
+        return $this->compte_validate;
+    }
+
+    public function setCompteValidate(string $compte_validate): self
+    {
+        $this->compte_validate = $compte_validate;
+
+        return $this;
+    }
+
+    public function getDateTimeValidcompte(): ?\DateTimeInterface
+    {
+        return $this->dateTime_validcompte;
+    }
+
+    public function setDateTimeValidcompte(?\DateTimeInterface $dateTime_validcompte): self
+    {
+        $this->dateTime_validcompte = $dateTime_validcompte;
 
         return $this;
     }

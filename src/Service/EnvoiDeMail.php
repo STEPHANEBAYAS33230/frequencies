@@ -12,7 +12,7 @@ use Symfony\Component\Mime\Email;
 class EnvoiDeMail
 {
 
-    public function SendEmailCode(MailerInterface $mailer,Utilisateur $user,$from,$subject,$message,$code) {
+    public function SendEmailCode(MailerInterface $mailer,Utilisateur $user,$from,$subject,$message,$code,$bouton,$textBouton,$hrefBouton) {
         $email=$user->getEmail();
         $prenomUtilisateur=$user->getPrenom();
         $nomUtilisateur=$user->getNom();
@@ -36,6 +36,9 @@ class EnvoiDeMail
                 'nom' => $nomUtilisateur,
                 'prenom'=> $prenomUtilisateur,
                 'code'=> $code,
+                'bouton'=> $bouton,
+                'textBouton'=> $textBouton,
+                'hrefBouton'=> $hrefBouton
             ]);
         $mailer->send($email);
         //***************************

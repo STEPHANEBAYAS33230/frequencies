@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} | LIEN NON VALIDE{% endblock %}
+
+{% block main %}
+    <div>
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="text-warning">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+
+
+
+
+
+    <h1>ERREUR LIEN NON VALIDE</h1>
+
+    <a class="btn btn-outline-primary" href="{{ path('home_controller') }}">Retour home</a>
+
+{% endblock %}

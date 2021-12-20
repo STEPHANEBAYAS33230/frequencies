@@ -36,6 +36,6 @@ security:
     access_control:
         #- { path: ^/, roles: PUBLIC_ACCESS } #URL autorisé au visiteur anonymous
         - { path: ^/login, roles: PUBLIC_ACCESS }
-        - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/monAppli, roles: [ ROLE_ADMIN, ROLE_USER] }
-        - { path: ^/monApplI, roles: [ ROLE_ADMIN, ROLE_INTER] }
+        - { path: ^/admin/register, roles: ROLE_ADMIN }
+        - { path: ^/monAppli, roles: ROLE_USER }
+        - { path: ^/monApplI, roles: [ ROLE_INTER,ROLE_ADMIN, ROLE_USER] }

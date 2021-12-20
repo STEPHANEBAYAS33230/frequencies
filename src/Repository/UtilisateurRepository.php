@@ -44,6 +44,26 @@ class UtilisateurRepository extends ServiceEntityRepository implements PasswordU
 
     }
 
+    public function trouverUtilisateurParToken($token)
+    {        return $this->createQueryBuilder('u')
+        ->Where('u.keyCode = :val')
+        ->setParameter('val', $token)
+        ->getQuery()
+        ->getResult();
+
+    }
+
+    public function trouverDateCompteValidate()
+    {    //rechercher les comptes crees non validdes : false
+        $val="false";
+        return $this->createQueryBuilder('u')
+        ->Where('u.dateTime_validcompte IS NOT NULL')
+        ->andWhere('u.compte_validate = :val')
+        ->setParameter('val', $val)
+        ->getQuery()
+        ->getResult();
+
+    }
     // /**
     //  * @return Utilisateur[] Returns an array of Utilisateur objects
     //  */

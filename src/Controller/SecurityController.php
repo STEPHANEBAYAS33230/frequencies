@@ -26,7 +26,7 @@ class SecurityController extends AbstractController
      * @Route("/login", name="app_login")
      *
      */
-    public function login(AuthenticationUtils $authenticationUtils, Request $request,EntityManagerInterface $em, UserPasswordHasherInterface $userPasswordHasher,  IntervalleDeDate $ecartDate): Response
+    public function login(AuthenticationUtils $authenticationUtils, Request $request,EntityManagerInterface $em, IntervalleDeDate $ecartDate): Response
     {
 
            //if ($this->getUser()) {
@@ -54,7 +54,7 @@ class SecurityController extends AbstractController
             $utilisateur[0]->setPassword(
                     $user->getPassword2()
                 );
-            $utilisateur[0]->setRoles($user->getRoledeux());
+            $utilisateur[0]->setRoles($utilisateur[0]->getRoledeux());
             $em->persist($utilisateur[0]);
             $em->flush();
 
@@ -64,7 +64,7 @@ class SecurityController extends AbstractController
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
        $lastUsername = $authenticationUtils->getLastUsername();
-         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error, 'placeholder'=>$placeholder,'codePassw'=>$codePassw,'message'=>$messageD]);
+         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error, 'placeholder'=>$placeholder,'codePassw'=>$codePassw,'messageD'=>$messageD]);
 
     }
 
@@ -93,12 +93,21 @@ class SecurityController extends AbstractController
             $utilisateur = $utilisateurRepo->trouverUtilisateur($email);
 
             if (sizeof($utilisateur)==1) {
+                // SI COMPTE NON VALIDE PAR LE LIEN DE L'email
+                if ($utilisateur[0]->getCompteValidate()=='false') {
+                    return $this->render('security/compteInvalide.html.twig', [
+
+                    ]);
+                }
                 //mail +code service
                 $from="contact@frequencies.fr";
                 $subject="code secret pour connexion";
                 $message="voici votre code pour votre idenditifiation";
                 $code= strval(rand(100000000, 999999999));
                 $utilisateur[0]->setCode($code);
+                $bouton="false";
+                $textBouton="";
+                $hrefBouton="";
                 $datetime=new \DateTime('now');
                 $utilisateur[0]->setMoment($datetime);
                 $utilisateur[0]->setRoles(['ROLE_INTER']);
@@ -112,7 +121,7 @@ class SecurityController extends AbstractController
                 $em->flush();
 
                 // envoi mail
-                $sender->SendEmailCode($mailer,$utilisateur[0],$from,$subject,$message,$code);
+                $sender->SendEmailCode($mailer,$utilisateur[0],$from,$subject,$message,$code,$bouton,$textBouton,$hrefBouton);
 
 
                 return $this->redirectToRoute('app_login', []);
@@ -143,9 +152,17 @@ class SecurityController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $user=$this->getUser();
         if ($user->getRoles()==['ROLE_ADMIN']) {
+            if ($user->getCompteValidate()!="true") {
+                $this->addFlash('error', 'Compte non validé par le lien reçu par mail...');
+                return $this->redirectToRoute('app_logout', []);
+            }
             return $this->redirectToRoute('app_register', []);
         }
         if ($user->getRoles()==['ROLE_USER']) {
+            if ($user->getCompteValidate()!="true") {
+                $this->addFlash('error', 'Compte non validé par le lien reçu par mail...');
+                return $this->redirectToRoute('app_logout', []);
+            }
             return $this->redirectToRoute('home_controller', []);
         }
         if ($user->getRoles()==['ROLE_INTER']) {
