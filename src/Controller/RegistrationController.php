@@ -53,7 +53,7 @@ class RegistrationController extends AbstractController
             //envoi mail pour confirme du compte
             $from="contact@frequencies.fr";
             $subject="Validation de votre compte";
-            $message="voici le lien pour valider votre compte: ";
+            $message="voici le lien pour valider votre compte: (valable 15min)";
             $code= "";
             $bouton="true";
             $textBouton="Valider son compte";

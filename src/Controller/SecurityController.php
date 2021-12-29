@@ -156,7 +156,7 @@ class SecurityController extends AbstractController
                 $this->addFlash('error', 'Compte non validé par le lien reçu par mail...');
                 return $this->redirectToRoute('app_logout', []);
             }
-            return $this->redirectToRoute('app_register', []);
+            return $this->redirectToRoute('admin', []);
         }
         if ($user->getRoles()==['ROLE_USER']) {
             if ($user->getCompteValidate()!="true") {

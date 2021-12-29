@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} | CREER EPISODE DANS UNE SERIE SONNORE{% endblock %}
+
+{% block main %}
+    {% if (is_granted('ROLE_ADMIN')) %}
+        <div>
+            <h1>choisissez la serie où vous voulez créer des épisodes: </h1>
+            {% for serie in series %}
+                <div class="bg-warning">
+                    <h1>{{ serie.nom }}</h1><a class="btn btn-success" href="{{ path('creer_episode',{'seri':serie.id}) }}">choisir cette serie pour ajouter des épisode(s)</a>
+                    {% for episode in episodes %}
+                        {% if serie==episode.serie %}
+                            <p>Episode N°{{ episode.numero }} :{{ episode.nomEpisode }}</p>
+                            <audio id="sonnore{{ episode.id }}" src="{{ asset('uploads/sonnores/' ~ episode.brochureFilename) }}" controls preload="auto" >
+                                Votre navigateur ne supporte pas l'élément <code>audio</code>.
+                            </audio><a class="btn btn-primary" href="{{ path('modifier_episode',{'episodId':episode.id}) }}">-modifier-</a><a href="{{ path('delete_episode',{'episodId':episode.id}) }}" class="btn btn-danger">-supprimer-</a><br>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div>
+                    <h1><hr></h1>
+                </div>
+            {% endfor %}
+            <a class="btn btn-outline-primary" href="{{ path('admin') }}">Retour home-Admin</a>
+        </div>
+
+    {% endif %}
+
+
+
+{% endblock %}

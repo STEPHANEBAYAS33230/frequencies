@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} | CREER EPISODE DANS UNE SERIE SONNORE{% endblock %}
+
+{% block main %}
+    {% if (is_granted('ROLE_ADMIN')) %}
+        <div>
+            {#  {% for serie in series %} #}
+            <div class="bg-secondary">
+                <h1>{{ series.nom }}</h1>
+                {% for episode in episodes %}
+                    {% if series==episode.serie %}
+                        <p>Episode N°{{ episode.numero }} :{{ episode.nomEpisode }}</p>
+                        <audio id="sonnore{{ episode.id }}" src="{{ asset('uploads/sonnores/' ~ episode.brochureFilename) }}" controls preload="auto" >
+                            Votre navigateur ne supporte pas l'élément <code>audio</code>.
+                        </audio><br>
+                    {% endif %}
+
+                {% endfor %}
+            </div>
+            <div>
+                <h1><hr></h1>
+            </div>
+            {# {% endfor %} #}
+        </div>
+        <div>
+            <h1>MODIFIER UN EPISODE DANS UNE SERIE</h1>
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="text-warning">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            {{ form_start(episodeForm) }}
+            {{ form_widget(episodeForm.serie,{'required': 'true'}) }}<br>
+            {# {{ form_widget(episodeForm.brochure,{'required': 'false'}) }}<br> #}
+            <button id="buttonForm" type="submit" class="btn btn-success" onmouseout="noDisable()" onmouseover="disable()">creer l'episode</button>
+            {{ form_end(episodeForm) }}
+            <a class="btn btn-outline-primary" href="{{ path('admin') }}">Retour home-Admin</a>
+        </div>
+    {% endif %}
+
+    <audio id="sonnore" src="{{ asset('uploads/sonnores/' ~ episodeModif.brochureFilename) }}" controls preload="auto" autoplay>
+        Votre navigateur ne supporte pas l'élément <code>audio</code>.
+    </audio>
+    <br>
+    fichier audio actuel:
+    <audio id="sonnore{{ episodeModif.id }}" src="{{ asset('uploads/sonnores/' ~ episodeModif.brochureFilename) }}" controls preload="auto" >
+     Votre navigateur ne supporte pas l'élément <code>audio</code>.
+    </audio>
+    <script type="text/javascript">
+       noDisable();
+        document.getElementById("episode_brochure").onchange = function () {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                // get loaded data and render thumbnail.
+                document.getElementById("sonnore").src = e.target.result;
+            };
+
+            // read the image file as a data URL.
+            reader.readAsDataURL(this.files[0]);
+        };
+        function disable(){
+            document.getElementById("episode_serie").style="visibility: visible;";
+        }
+        function noDisable(){
+            document.getElementById("episode_serie").style="visibility: visible;";
+        }
+
+    </script>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} | Accueil{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+{% endblock %}
+
+{% block scriptjs %}
+    <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block main %}
+    {% if (is_granted('ROLE_ADMIN')) %}
+        <div class="container">
+            <div class="row justify-content-around col-12">
+                <h1>menu admin</h1>
+                <p>
+                    <a href="{{ path('app_logout') }}">logout</a>
+                </p>
+                <p>
+                    <a href="{{ path('creer_serie') }}">créer une serie</a>
+                </p>
+                <p>
+                    <a href="{{ path('creer_serie_episode') }}">créer/modifier/supprimer episode ds 1serie</a>
+                </p>
+                <p>
+                    <a href="{{ path('app_register') }}">new utilisateur</a>
+                </p>
+            </div> <!-- fin row -->
+        </div>
+        <div>
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="text-warning">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+        <div>
+            {% for serie in series %}
+                <div class="bg-warning">
+                    <h1>{{ serie.nom }}</h1>
+                    {% for episode in episodes %}
+                        {% if serie==episode.serie %}
+                            <p>Episode N°{{ episode.numero }} :{{ episode.nomEpisode }}</p>
+                            <audio id="sonnore{{ episode.id }}" src="{{ asset('uploads/sonnores/' ~ episode.brochureFilename) }}" controls preload="auto" >
+                                Votre navigateur ne supporte pas l'élément <code>audio</code>.
+                            </audio> <br>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div>
+                    <h1><hr></h1>
+                </div>
+            {% endfor %}
+        </div>
+
+    {% endif %}
+{% endblock %}

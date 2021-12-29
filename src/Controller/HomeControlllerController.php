@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Episode;
+use App\Entity\Serie;
 use App\Entity\Utilisateur;
 use App\Service\IntervalleDeDate;
 use Doctrine\ORM\EntityManagerInterface;
@@ -45,9 +47,14 @@ class HomeControlllerController extends AbstractController
     public function indexUn(): Response
     {
 
+        //**********recup de toute les serie/episode
+        $serieRepo = $this->getDoctrine()->getRepository(Serie::class);
+        $serie = $serieRepo->findAll();
+        $episodeRepo=$this->getDoctrine()->getRepository(Episode::class);
+        $episode=$episodeRepo->trouverEpiOrdre();
 
         return $this->render('home_controlller/index.html.twig', [
-
+            'series' =>$serie, 'episodes' =>$episode
         ]);
     }
 }
